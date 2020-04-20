@@ -68,7 +68,6 @@ blastn -db ~/paper-2/06_blast/lva_db/lva_rna -query ~/paper-2/Trinity.fasta -out
 ```
 
 
-
 ### BLASTP against Nr arthropod (14-3-2020)
 ```sh
 # BLASTP (PID: 16146)
@@ -85,31 +84,12 @@ blastp -db nr_db/nr_arthropod_20200207 -query ~/paper-2/not-blast-yet-query.fast
 ```sh
 ./signalp -batch 10000 -fasta ~/paper-2/Trinity.fasta.transdecoder.pep -format short -gff3 -mature -org euk -stdout
 ```
-```
-jiratchaya@poweredge-r440:~/paper-2/07_signalp$ ./signalp -help
-Usage of ./signalp:
-  -batch int
-        Number of sequences that the tool will run simultaneously. Decrease or increase size depending on your system memory. (default 10000)
-  -fasta string
-        Input file in fasta format.
-  -format string
-        Output format. 'long' for generating the predictions with plots, 'short' for the predictions without plots. (default "short")
-  -gff3
-        Make gff3 file of processed sequences.
-  -mature
-        Make fasta file with mature sequence.
-  -org string
-        Organism. Archaea: 'arch', Gram-positive: 'gram+', Gram-negative: 'gram-' or Eukarya: 'euk' (default "euk")
-  -plot string
-        Plots output format. When long output selected, choose between 'png', 'eps' or 'none' to get just a tabular file. (default "png")
-  -prefix string
-        Output files prefix. (default "Input file prefix")
-  -stdout
-        Write the prediction summary to the STDOUT.
-  -tmp string
-        Specify temporary file directory. (default "System default tmpdir")
-  -verbose
-        Verbose output. Specify '-verbose=false' to avoid printing. (default true)
-  -version
-        Prints version.
+
+## InterProScan
+
+First, create environment for interproscan and run interproscan through this environment
+Put the shortcut of executable program and input in the same working directory
+
+```sh
+./interproscan.sh -i Trinity.fasta.transdecoder.fasta -cpu 30
 ```
