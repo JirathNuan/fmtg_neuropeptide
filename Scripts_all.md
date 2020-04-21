@@ -90,6 +90,13 @@ blastp -db nr_db/nr_arthropod_20200207 -query ~/paper-2/not-blast-yet-query.fast
 First, create environment for interproscan and run interproscan through this environment
 Put the shortcut of executable program and input in the same working directory
 
+**Remark: Beware of asterisk `*` that indicates stop codon from translating DNA sequences to protein sequences**
+
+
 ```sh
+# on server .242
 ./interproscan.sh -i Trinity.fasta.transdecoder.fasta -cpu 30
+
+# on server .49
+./interproscan.sh -i Trinity.fasta.transdecoder.fasta -cpu 22
 ```
