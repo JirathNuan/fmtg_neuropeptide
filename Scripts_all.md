@@ -100,3 +100,32 @@ Put the shortcut of executable program and input in the same working directory
 # on server .49
 ./interproscan.sh -i Trinity.fasta.transdecoder.fasta -cpu 22
 ```
+
+## Deeploc
+
+input: Trinity.fasta.transdecoder.fasta
+
+
+	Deeploc requirements:
+	git+https://github.com/Lasagne/Lasagne.git#egg=Lasagne-0.2.dev1
+	numpy==1.14.0
+	scipy==1.0.0
+	six==1.11.0
+	Theano==1.0.1
+
+**Note: I've used to install deeploc's requirements on environment of python 3.7, and it was failed. Because of numpy=1.14.0 is only compatible for version 2.7.*, 3.4.*, 3.5.*, 3.6.*, >=3.5, <3.6.0a0, >=2.7 ,<2.8.0a0, >=3.6, adn <3.7.0a0. So, Downgrading python version to 3.6 is worked for me. **
+
+
+```sh
+# Create a specific environment for deeploc
+conda create -n deeploc python=3.6 -y
+
+# go to deeploc source code directory and install requirements
+pip install -r requirements.txt
+python setup.py install
+
+# Test DeepLoc by running
+deeploc -f test.fasta
+
+
+```
