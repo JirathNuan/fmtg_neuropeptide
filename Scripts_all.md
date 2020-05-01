@@ -114,7 +114,7 @@ input: Trinity.fasta.transdecoder.fasta
 	Theano==1.0.1
 
 > **Remarks:**
-	I've used to install deeploc's requirements on environment of python 3.7, and it was failed. Because of numpy=1.14.0 is only compatible for version 2.7.*, 3.4.*, 3.5.*, 3.6.*, >=3.5, <3.6.0a0, >=2.7 ,<2.8.0a0, >=3.6, adn <3.7.0a0. So, Downgrading python version to 3.6 is worked for me.
+	I've used to install deeploc's requirements on environment of python 3.7, and it was failed. Because of numpy=1.14.0 is only compatible for version 2.7.x, 3.4.x, 3.5.x, 3.6.x, >=3.5, <3.6.0a0, >=2.7 ,<2.8.0a0, >=3.6, and <3.7.0a0. So, Downgrading python version to 3.6 is worked for me.
 
 
 ```sh
