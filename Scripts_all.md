@@ -129,4 +129,6 @@ python setup.py install
 deeploc -f test.fasta
 
 
+# Run Deeploc on working directory
+deeploc -f test.fasta
 ```
