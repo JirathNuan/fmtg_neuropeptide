@@ -10,7 +10,6 @@ conda activate transdecoder
 TransDecoder.LongOrfs -m 66 -t ~/paper-2/3dec/04_assembly_trinity/Trinity.fasta
 TransDecoder.Predict -t ~/paper-2/3dec/04_assembly_trinity/Trinity.fasta --single_best_only 
 
-
 ```
 
 ## BLAST
@@ -131,4 +130,13 @@ deeploc -f test.fasta
 
 # Run Deeploc on working directory
 deeploc -f test.fasta
+
+
+:'Run Deeploc with my data
+Current working directory: ~/10_deeploc'
+
+deeploc -f query_deeploc.fasta -o output_deeploc.txt
+
 ```
+
+
