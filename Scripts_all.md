@@ -1,8 +1,111 @@
 Use transcripts assembled on 3Dec2019
 
+## Quality control
+
+```bash
+# activate conda environment
+conda activate qc
+
+# Quality check (raw reads)
+fastqc \
+-t 32 \
+-o 01_quality_check/before_trim/ \
+raw_data/*.fq
+
+# Quality control
+for (( i = 1; i <= 4; i++ )); do
+for (( j = 1; j <= 2; j++ )); do
+cutadapt \
+--max-n 0.00 --discard-trimmed \
+--cores 32 \
+-a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
+-o '02_trim/trimmed.S'$i'_rep'$j'_1.fq' \
+-p '02_trim/trimmed.S'$i'_rep'$j'_2.fq' \
+'raw_data/S'$i'_rep'$j'_1.fq' \
+'raw_data/S'$i'_rep'$j'_2.fq' \
+> '02_trim/S'$i'_rep'$j'.log'
+done
+done
+
+# Quality check (clean reads)
+fastqc \
+-t 32 \
+-o 01_quality_check/after_trim/ \
+02_trim/*.fq
+
+# Summarize QC report
+multiqc \
+--outdir 01_quality_check .
+
+# Deactivate conda environments
+conda deactivate
+```
+
+## *De novo* transcriptome assembly
+
+```bash
+# activate conda environment
+conda activate assembly
+
+# *in silico* read normalization before assembly (duration: 20191201 23:51 --> 20191202 04:08)
+insilico_read_normalization.pl \
+--seqType fq --max_cov 30 --pairs_together \
+--CPU 32 --JM 60G \
+--left \
+02_trim/trimmed.S1_rep1_1.fq,\
+02_trim/trimmed.S1_rep2_1.fq,\
+02_trim/trimmed.S2_rep1_1.fq,\
+02_trim/trimmed.S2_rep2_1.fq,\
+02_trim/trimmed.S3_rep1_1.fq,\
+02_trim/trimmed.S3_rep2_1.fq,\
+02_trim/trimmed.S4_rep1_1.fq,\
+02_trim/trimmed.S4_rep2_1.fq \
+--right \
+02_trim/trimmed.S1_rep1_2.fq,\
+02_trim/trimmed.S1_rep2_2.fq,\
+02_trim/trimmed.S2_rep1_2.fq,\
+02_trim/trimmed.S2_rep2_2.fq,\
+02_trim/trimmed.S3_rep1_2.fq,\
+02_trim/trimmed.S3_rep2_2.fq,\
+02_trim/trimmed.S4_rep1_2.fq,\
+02_trim/trimmed.S4_rep2_2.fq \
+--output 03_normalization/ \
+> 03_normalization/insilico_norm.log
+
+# De novo transcriptome assembly (duration: 20191202 08:43 --> 20191203 02:27)
+Trinity \
+--seqType fq --no_normalize_reads --monitoring --no_version_check \
+--CPU 32 --max_memory 60G \
+--left 03_normalization/left.norm.fq \
+--right 03_normalization/right.norm.fq \
+--output 04_assembly_trinity/ \
+> 04_assembly_trinity/trinity.log
+
+# deactivate conda environment
+conda deactivate
+
+
+# [Optional] Examine server usage from trinity
+conda create --name assemmbly2 trinity=2.8.5 r-base -y
+conda activate assemmbly2
+
+~/miniconda3/pkgs/trinity-2.8.5-h8b12597_5/opt/trinity-2.8.5/trinity-plugins/COLLECTL/examine_resource_usage_profiling.pl collectl/
+
+# [Optional] Examine the assembly statistic
+TrinityStats.pl 04_assembly_trinity/Trinity.fasta > assembly_stats.txt
+
+# [Optional] Move files
+mv collectl.* collectl/
+mv assembly_stats.txt 04_assembly_trinity/
+
+# Deactivate environments
+conda deactivate
+```
+
 ## Translate to protein 
 
 ```sh
+# create and activate conda environment
 conda create -n transdecoder transdecoder=5.5.0
 conda activate transdecoder
 
@@ -15,7 +118,7 @@ TransDecoder.Predict -t ~/paper-2/3dec/04_assembly_trinity/Trinity.fasta --singl
 ## BLAST
 
 ```sh
-# Create blast environment
+# create and activate conda environment
 conda create -n ncbi blast=2.9.0
 conda activate ncbi
 
@@ -119,6 +222,7 @@ input: Trinity.fasta.transdecoder.fasta
 ```sh
 # Create a specific environment for deeploc
 conda create -n deeploc python=3.6 -y
+conda activate deeploc
 
 # go to deeploc source code directory and install requirements
 pip install -r requirements.txt
