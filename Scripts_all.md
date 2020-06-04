@@ -133,6 +133,7 @@ deeploc -f test.fasta
 ```
 
 Run Deeploc with my data
+
 Current working directory: ~/10_deeploc
 ```sh
 deeploc -f query_deeploc.fasta -o output_deeploc.txt
