@@ -86,6 +86,22 @@ makeblastdb -in GCF_003789085.1_ASM378908v1_protein.faa -dbtype prot -title lva_
 blastp -db lva_prot -query cd-hit_Trinity.fasta.transdecoder.pep -out cd-hit.Trinity_transdecoder_prot.outfmt6 -evalue 1e-5 -outfmt "6 std qcovhsp frames stitle" -max_target_seqs 1 -num_threads 24 & disown
 
 ```
+### BLASTX against Arthropod Nr database
+
+```bash
+conda activate blast
+
+cd ~/fmtg_rnaseq
+ln -s 08_Transdecoder/cd-hit_Trinity.fasta.transdecoder.cds 11_BLASTX/
+cd 11_BLASTX
+
+
+# BLASTX
+blastx -db nr_arthropod -query cd-hit_Trinity_transdecoder_cds.fasta -out cd-hit.Trinity_transdecoder_cds.outfmt6 -evalue 1e-5 -outfmt "6 std qcovhsp stitle" -max_target_seqs 1 -num_threads 24 & disown
+
+
+```
+
 
 ## Identification of putative neuropeptide precursors by SignalP and Deeploc
 
