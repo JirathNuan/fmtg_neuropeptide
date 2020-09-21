@@ -1,6 +1,8 @@
 RNA-Seq data analysis of Fme Fenneropenaeus merguiensis thoracic ganglia
 ================================
 
+> Remarks: all following commands are performed on Ubuntu 18.04 LTS 64-bit operating system Dell Server 24 CPU threads and 48GB RAM
+
 ## Prerequisites
 
 Create root working directory, and analysis subdirectories
