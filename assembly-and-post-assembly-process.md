@@ -1,20 +1,16 @@
 # Transcriptome assembly and post-assembly processing
 
 
-> Server specification: 32 cores CPU and 62 GB RAM (242 Ubuntu 19.10 server)
+> Remarks: all following commands are performed on 32 cores CPU and 62 GB RAM (Ubuntu 19.10 server) `.242`
 
 Create analysis directory
 
-> current directory `~/paper-2`
+> current directory `~/fmtg_rnaseq`
 
 ```bash
-mkdir raw_data
-mkdir 01_quality_check && cd 01_quality_check && mkdir before after && cd ..
-mkdir 02_trim
-mkdir 03_normalization
-mkdir 04_assembly_trinity
-mkdir 05_clustering
-mkdir 06_translate
+mkdir 00_raw_data 01_quality_check 02_trim 03_normalization 04_assembly_trinity 05_clustering 06_translate
+mkdir 01_quality_check/{before,after}
+
 ```
 
 ## FASTQ quality control and adapter trimming
@@ -28,7 +24,7 @@ conda activate qc
 LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ```bash
-fastqc -t 32 -o 01_quality_check/before/ raw_data/*
+fastqc -t 32 -o 01_quality_check/before/ 00_raw_data/*
 ```
 
 FastQC generated 2 output file per once, html and compressed file. Then MultiQC was used to generate nice graphical visualization and combine seperated html file into a single file. This help us to interpret easily at a short time. 
@@ -52,12 +48,11 @@ cutadapt \
 -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCA -A AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
 -o '02_trim/trimmed.TgS'$i'_rep'$j'_1.fq' \
 -p '02_trim/trimmed.TgS'$i'_rep'$j'_2.fq' \
-'raw_data/TgS'$i'_rep'$j'_1.fq' \
-'raw_data/TgS'$i'_rep'$j'_2.fq' \
+'00_raw_data/TgS'$i'_rep'$j'_1.fq' \
+'00_raw_data/TgS'$i'_rep'$j'_2.fq' \
 > '02_trim/TgS'$i'_rep'$j'.log'
 done
 done
-# (19.14 10-Jan-2020) >>> (19.26 10-Jan-2020)
 ```
 
 Check quality of FASTQ file after trimming
@@ -93,7 +88,7 @@ conda create --name trinity trinity=2.8.5 -y
 conda activate trinity
 ```
 
-Read normalization
+LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ```bash
 ### in silico read normalization before assembly
@@ -121,6 +116,8 @@ insilico_read_normalization.pl --CPU 32 --JM 62G --seqType fq \
 
 ## __*De novo*__ transcriptome assembly
 
+LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
 ```bash
 Trinity \
 --CPU 32 --max_memory 60G \
@@ -131,6 +128,8 @@ Trinity \
 ```
 
 ## Contig clustering
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ```bash
 conda create --name cluster cd-hit=4.8.1 -y
@@ -143,4 +142,27 @@ cd-hit-est -T 32 -M 0 -c 0.95 -G 0 -aS 0.99 \
 ### Deactivate environments
 conda deactivate
 ```
+
+## Predict the protein-coding regions from the assembled contigs
+
+the coding regions within the assembled contigs can be extracted by many tools that finds the Open Reading Frames (ORF) within a sequence. In this work, [Transdecoder](https://github.com/TransDecoder/TransDecoder) was used to generate a set of protein-coding sequences. 
+
+Run Transdecoder in the environment named 
+
+```bash
+# create and activate conda environment
+conda create --name translate transdecoder=5.5.0 -y
+conda activate translate
+
+# create a symbolic link of clustered transcript assembly in the current directory
+cd 06_translate
+ln -s ~/fmtg_rnaseq/05_clustering/cd-hit_Trinity.fasta ./
+
+# เนื่องจากอยากให้โปรแกรม translate sequence ทุกเส้น, assembly มาได้ contig ยาวไม่ต่ำกว่า 200 bp ก็เลยเปลี่ยน minlength จาก 100 เป็น (200/3)=66 aa
+TransDecoder.LongOrfs -m 66 -t cd-hit_Trinity.fasta
+TransDecoder.Predict -t cd-hit_Trinity.fasta --single_best_only
+```
+
+
+
 
