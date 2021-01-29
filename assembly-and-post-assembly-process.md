@@ -1,7 +1,7 @@
 # Transcriptome assembly and post-assembly processing
 
 
-> Remarks: all following commands are performed on 32 cores CPU and 62 GB RAM (Ubuntu 19.10 server) `.242`
+> Remarks: all following commands are performed on 32 cores CPU and 62 GB RAM (Ubuntu 19.10 server)
 
 Create analysis directory
 
@@ -15,14 +15,14 @@ mkdir 01_quality_check/{before,after}
 
 ## FASTQ quality control and adapter trimming
 
+Creating an environment
 ```bash
 # Create and activate environment for FASTQ quality control and read trimming
 conda create --name qc fastqc=0.11.8 cutadapt=2.7 multiqc=1.8 -y
 conda activate qc
 ```
 
-LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+Run fastQC
 ```bash
 fastqc -t 32 -o 01_quality_check/before/ 00_raw_data/*
 ```
@@ -36,7 +36,7 @@ multiqc --filename before_qc_multiqc_report.html .
 cd ../../
 ```
 
-Next, Cutadapt was performed to trim the sequencing adapters, reads containing quality lower than 20, and preserve reads that long at least 25 bases as follow:
+Next, Cutadapt was performed to trim the sequencing adapters, reads containing quality lower than 20, and preserve reads that long at least 25 bases as follows
 
 ```bash
 ### Quality control
@@ -74,11 +74,7 @@ conda deactivate
 ```
 
 
-
-
 ## __*in silico*__ read normalization
-
-LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 Create environment for Trinity
 
@@ -87,9 +83,7 @@ Create environment for Trinity
 conda create --name trinity trinity=2.8.5 -y
 conda activate trinity
 ```
-
-LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+Run _in silico_ read normalization
 ```bash
 ### in silico read normalization before assembly
 insilico_read_normalization.pl --CPU 32 --JM 62G --seqType fq \
@@ -116,8 +110,6 @@ insilico_read_normalization.pl --CPU 32 --JM 62G --seqType fq \
 
 ## __*De novo*__ transcriptome assembly
 
-LoremLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
 ```bash
 Trinity \
 --CPU 32 --max_memory 60G \
@@ -128,8 +120,6 @@ Trinity \
 ```
 
 ## Contig clustering
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ```bash
 conda create --name cluster cd-hit=4.8.1 -y
@@ -145,7 +135,7 @@ conda deactivate
 
 ## Predict the protein-coding regions from the assembled contigs
 
-the coding regions within the assembled contigs can be extracted by many tools that finds the Open Reading Frames (ORF) within a sequence. In this work, [Transdecoder](https://github.com/TransDecoder/TransDecoder) was used to generate a set of protein-coding sequences. 
+The coding regions within the assembled contigs can be extracted by many tools that finds the Open Reading Frames (ORF) within a sequence. In this work, [Transdecoder](https://github.com/TransDecoder/TransDecoder) was used to generate a set of protein-coding sequences. 
 
 Run Transdecoder in the environment named 
 

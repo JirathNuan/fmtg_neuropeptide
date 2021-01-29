@@ -34,20 +34,16 @@ blastx -db nr_arthropod -query cd-hit_Trinity_transdecoder_cds.fasta -out cd-hit
 ## Identification of putative neuropeptide precursors by SignalP and Deeploc
 
 ### SignalP
+
+SignalP version 5.0 was used to predict the presence of the signal peptide at the _N_-terminal of a protein sequence. The software can be downloaded from [SignalP 5.0 web server](http://www.cbs.dtu.dk/services/SignalP/) for academic users. 
+
 ```sh
 ./signalp -batch 10000 -fasta ~/fmtg_rnaseq/08_Transdecoder/cd-hit_Trinity.fasta.transdecoder.pep -format short -gff3 -mature -org euk -stdout
 ```
 
 ### Deeploc
 
-input: cd-hit_Trinity.fasta.transdecoder.pep
-
-	Deeploc requirements:
-	git+https://github.com/Lasagne/Lasagne.git#egg=Lasagne-0.2.dev1
-	numpy==1.14.0
-	scipy==1.0.0
-	six==1.11.0
-	Theano==1.0.1
+In this study, DeepLoc version 1.0 was used to identify subcellular localization of secretory proteins that resulted from the SignalP prediction. This prediction aimed to ensured that the secretory proteins are really secrete outside the cell. This software can be downloaded from [DeepLoc 1.0 web server](http://www.cbs.dtu.dk/services/DeepLoc-1.0/index.php) for academic users.
 
 > **Remarks:**
 	I've used to install deeploc's requirements on environment of python 3.7, and it was failed. Because of numpy=1.14.0 is only compatible for version 2.7.x, 3.4.x, 3.5.x, 3.6.x, >=3.5, <3.6.0a0, >=2.7 ,<2.8.0a0, >=3.6, and <3.7.0a0. Downgrading python version to 3.6 is worked for me.
