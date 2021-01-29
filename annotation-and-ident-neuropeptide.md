@@ -5,7 +5,7 @@
 
 ### Prerequisites
 
-According to the previously work `assembly-and-post-assembly-process.md`. The base working directory was set to `~/fmtg_rnaseq`, this part will continue to the downstream analysis of transcriptome assembly i.e. transcriptome annotation and identification of the neuropeptide precursors. 
+According to the previous work `assembly-and-post-assembly-process.md`. The base working directory was set to `~/fmtg_rnaseq`, this part will continue to the downstream analysis of transcriptome assembly i.e. transcriptome annotation and identification of the neuropeptide precursors. 
 
 First, create the working directories for each analysis. All directories should be located in `~/fmtg_rnaseq` directory.
 ```
@@ -43,7 +43,7 @@ SignalP version 5.0 was used to predict the presence of the signal peptide at th
 
 ### Deeploc
 
-In this study, DeepLoc version 1.0 was used to identify subcellular localization of secretory proteins that resulted from the SignalP prediction. This prediction aimed to ensured that the secretory proteins are really secrete outside the cell. This software can be downloaded from [DeepLoc 1.0 web server](http://www.cbs.dtu.dk/services/DeepLoc-1.0/index.php) for academic users.
+In this study, DeepLoc version 1.0 was used to identify the subcellular localization of secretory proteins that resulted from the SignalP prediction. This prediction aimed to ensure that the secretory proteins are really secreted outside the cell. This software can be downloaded from [DeepLoc 1.0 web server](http://www.cbs.dtu.dk/services/DeepLoc-1.0/index.php) for academic users.
 
 > **Remarks:**
 	I've used to install deeploc's requirements on environment of python 3.7, and it was failed. Because of numpy=1.14.0 is only compatible for version 2.7.x, 3.4.x, 3.5.x, 3.6.x, >=3.5, <3.6.0a0, >=2.7 ,<2.8.0a0, >=3.6, and <3.7.0a0. Downgrading python version to 3.6 is worked for me.
