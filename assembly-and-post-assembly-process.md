@@ -3,7 +3,7 @@
 
 > Remarks: all following commands are performed on 32 cores CPU and 62 GB RAM (Ubuntu 19.10 server)
 
-Create analysis directory
+Create analysis directories
 
 > current directory `~/fmtg_rnaseq`
 
@@ -15,7 +15,7 @@ mkdir 01_quality_check/{before,after}
 
 ## FASTQ quality control and adapter trimming
 
-Creating an environment
+Creating environments
 ```bash
 # Create and activate environment for FASTQ quality control and read trimming
 conda create --name qc fastqc=0.11.8 cutadapt=2.7 multiqc=1.8 -y
@@ -148,7 +148,6 @@ conda activate translate
 cd 06_translate
 ln -s ~/fmtg_rnaseq/05_clustering/cd-hit_Trinity.fasta ./
 
-# เนื่องจากอยากให้โปรแกรม translate sequence ทุกเส้น, assembly มาได้ contig ยาวไม่ต่ำกว่า 200 bp ก็เลยเปลี่ยน minlength จาก 100 เป็น (200/3)=66 aa
 TransDecoder.LongOrfs -m 66 -t cd-hit_Trinity.fasta
 TransDecoder.Predict -t cd-hit_Trinity.fasta --single_best_only
 ```
